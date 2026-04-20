@@ -62,33 +62,33 @@ export function SectionManager({ mouseNx, mouseNy }: Props) {
     const el = scrollRef.current
     if (!el) return
     const heroH = el.clientHeight
-    const scrollTop = el.scrollTop
+    const relScroll = el.scrollTop - heroH  // 0 = start of selectionWrapper
 
-    // blob morph
-    const blobRaw = Math.max(0, Math.min(1, (scrollTop - heroH) / (heroH * 2)))
+    // ── Phase 1: blob morphs (relScroll 0 → heroH*2) ──────────
+    const blobRaw = Math.max(0, Math.min(1, relScroll / (heroH * 2)))
     const blobT = easeInOut(blobRaw)
     if (pathRef.current) {
       pathRef.current.setAttribute('d', buildBlobPath(blobT))
     }
 
-    // glass panel rises over first 0.4 * heroH of scroll past hero
-    const glassRaw = Math.max(0, Math.min(1, (scrollTop - heroH) / (heroH * 0.4)))
+    // ── Phase 2: glass/cards rise (relScroll heroH*2 → heroH*2.6) ──
+    const glassRaw = Math.max(0, Math.min(1, (relScroll - heroH * 2) / (heroH * 0.6)))
     const glassT = easeInOut(glassRaw)
-
     if (glassRef.current) {
       glassRef.current.style.transform = `translateY(${lerp(100, 0, glassT)}%)`
       glassRef.current.style.opacity = String(glassT)
     }
     if (canvasWrapRef.current) {
-      canvasWrapRef.current.style.transform = `translateY(${lerp(0, 12, glassT)}%)`
+      canvasWrapRef.current.style.transform = `translateY(${lerp(0, 10, glassT)}%)`
     }
 
-    // poem text (fades out as glass comes in)
+    // ── Poem text: appears during blob phase, hides as glass rises ──
     if (textRef.current) {
-      const fadeIn = Math.min(1, Math.max(0, blobT / 0.05))
-      const opacity = fadeIn * Math.max(0, 1 - glassT)
+      const textIn  = Math.min(1, Math.max(0, (blobT - 0.45) / 0.35))
+      const textOut = 1 - glassT
+      const opacity = textIn * textOut
       textRef.current.style.opacity = String(opacity)
-      textRef.current.style.transform = `translateY(${lerp(12, 0, fadeIn)}px)`
+      textRef.current.style.transform = `translateY(${lerp(12, 0, textIn)}px)`
     }
   }, [])
 
@@ -110,14 +110,32 @@ export function SectionManager({ mouseNx, mouseNy }: Props) {
       </svg>
 
       <div ref={scrollRef} className={styles.scrollOuter}>
+        {/* ── Phase 0: Hero ── */}
         <HeroSection mouseNx={mouseNx} mouseNy={mouseNy} />
 
+        {/* ── Phase 1-2: Blob → Cards (600svh total) ── */}
         <div className={styles.selectionWrapper}>
           <div className={styles.stickyFrame}>
+            {/* 3D canvas with blob clip */}
             <div ref={canvasWrapRef} className={styles.canvasArea} style={{ clipPath: 'url(#blob-clip)' }}>
               <SceneCanvas mouseNx={mouseNx} mouseNy={mouseNy} />
             </div>
 
+            {/* Poem text overlay (phase 1) */}
+            <div
+              ref={textRef}
+              className={styles.textOverlay}
+              style={{ opacity: 0, transform: 'translateY(12px)' }}
+            >
+              {SITE_CONTENT.sections.map((s) => (
+                <div key={s.id} className={styles.poemBlock}>
+                  <h1 className={styles.poemHeading}>{s.heading}</h1>
+                  {s.body && <p className={styles.poemBody}>{s.body}</p>}
+                </div>
+              ))}
+            </div>
+
+            {/* Glass panel with card grid (phase 2) */}
             <div ref={glassRef} className={styles.glassPanel}>
               <div className={styles.cardGrid}>
                 {CARDS.map((card) => (
@@ -137,21 +155,9 @@ export function SectionManager({ mouseNx, mouseNy }: Props) {
                 ))}
               </div>
             </div>
-
-            <div
-              ref={textRef}
-              className={styles.textOverlay}
-              style={{ opacity: 0, transform: 'translateY(12px)' }}
-            >
-              {SITE_CONTENT.sections.map((s) => (
-                <div key={s.id} className={styles.poemBlock}>
-                  <h1 className={styles.poemHeading}>{s.heading}</h1>
-                  {s.body && <p className={styles.poemBody}>{s.body}</p>}
-                </div>
-              ))}
-            </div>
           </div>
 
+          {/* scrollSpacer = selectionWrapper height minus stickyFrame */}
           <div className={styles.scrollSpacer} />
         </div>
       </div>

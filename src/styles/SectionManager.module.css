@@ -20,8 +20,9 @@
 }
 
 /* ── Selection section ─────────────────────────── */
+/* Phase 1 blob morph: 200svh  Phase 2 glass/cards: 60svh  sticky area: 100svh  spacer: 240svh */
 .selectionWrapper {
-  height: 500svh;
+  height: 600svh;
 }
 
 .stickyFrame {
@@ -50,7 +51,7 @@
   align-items: center;
   justify-content: center;
   padding: calc(var(--header-height) + 1rem) 3vw 1rem;
-  background: rgba(10, 10, 10, 0.72);
+  background: rgba(10, 10, 10, 0.96);
   transform: translateY(100%);
   opacity: 0;
   will-change: transform, opacity;
@@ -186,6 +187,6 @@
 }
 
 .scrollSpacer {
-  height: 200svh;
+  height: 500svh;
   pointer-events: none;
 }

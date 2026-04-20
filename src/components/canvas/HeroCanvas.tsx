@@ -2,6 +2,9 @@ import { Canvas } from '@react-three/fiber'
 import { Suspense } from 'react'
 import { FloatingObjects } from './FloatingObjects'
 import { CameraRig } from './CameraRig'
+import { useGLTF } from '@react-three/drei'
+
+useGLTF.setDecoderPath('/draco/gltf/')
 
 interface Props {
   mouseNx: number

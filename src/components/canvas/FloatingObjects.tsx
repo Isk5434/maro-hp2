@@ -11,6 +11,20 @@ function FloatingGlb({ cfg }: { cfg: FloatingObjectConfig }) {
   const baseY = cfg.position[1]
   const time = useRef(cfg.floatOffset ?? 0)
 
+  const normalizedScene = (() => {
+    const clone = scene.clone()
+    const box = new THREE.Box3().setFromObject(clone)
+    const size = new THREE.Vector3()
+    box.getSize(size)
+    const maxDim = Math.max(size.x, size.y, size.z)
+    const s = maxDim > 0 ? 1.2 / maxDim : 1
+    clone.scale.setScalar(s)
+    const center = new THREE.Vector3()
+    new THREE.Box3().setFromObject(clone).getCenter(center)
+    clone.position.sub(center)
+    return clone
+  })()
+
   useFrame((_, delta) => {
     if (!groupRef.current) return
     time.current += delta * (cfg.floatSpeed ?? 0.7)
@@ -28,7 +42,7 @@ function FloatingGlb({ cfg }: { cfg: FloatingObjectConfig }) {
       rotation={cfg.rotation}
       scale={cfg.scale ?? 1}
     >
-      <primitive object={scene.clone()} />
+      <primitive object={normalizedScene} />
     </group>
   )
 }

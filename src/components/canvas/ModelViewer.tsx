@@ -55,7 +55,7 @@ function GltfModel() {
     const size = new THREE.Vector3()
     box.getSize(size)
     const maxDim = Math.max(size.x, size.y, size.z)
-    const normalizeScale = maxDim > 0 ? 2.0 / maxDim : 1
+    const normalizeScale = maxDim > 0 ? 1.176 / maxDim : 1
     clone.scale.setScalar(normalizeScale)
     const center = new THREE.Vector3()
     new THREE.Box3().setFromObject(clone).getCenter(center)

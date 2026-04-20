@@ -12,7 +12,7 @@ interface Props {
 export function SceneCanvas({ mouseNx, mouseNy }: Props) {
   return (
     <Canvas
-      camera={{ position: [0, 0.8, 5], fov: 38 }}
+      camera={{ position: [0, 0.5, 4.5], fov: 45 }}
       gl={{ antialias: true, alpha: true }}
       shadows
       style={{

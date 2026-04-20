@@ -6,9 +6,9 @@ export const MODEL_CONFIG = {
   // 4. Set usePrimitives: false to load the GLB
   path: '/models/main-model.glb',
 
-  position: [0, -1.2, 0] as [number, number, number],
+  position: [0, 0.6, 0] as [number, number, number],
   scale: [1, 1, 1] as [number, number, number],
-  rotation: [0, 0, 0] as [number, number, number],
+  rotation: [0, 4.538, 0] as [number, number, number],
 
   autoRotate: false,
   autoRotateSpeed: 0.004,
