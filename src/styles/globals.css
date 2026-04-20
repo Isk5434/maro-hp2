@@ -90,20 +90,9 @@ body {
   transition: opacity var(--transition-slow);
 }
 
-/* Edge vignette mask (radial-gradient - no image file needed) */
+/* Edge vignette mask — disabled */
 #root::after {
-  content: '';
-  position: fixed;
-  inset: 0;
-  background: radial-gradient(
-    ellipse at center,
-    transparent 48%,
-    rgba(255, 253, 240, 0.45) 72%,
-    var(--color-bg) 100%
-  );
-  pointer-events: none;
-  z-index: var(--z-edge);
-  transition: background var(--transition-slow);
+  content: none;
 }
 
 h1 {

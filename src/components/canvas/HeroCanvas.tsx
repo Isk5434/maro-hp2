@@ -4,7 +4,7 @@ import { FloatingObjects } from './FloatingObjects'
 import { CameraRig } from './CameraRig'
 import { useGLTF } from '@react-three/drei'
 
-useGLTF.setDecoderPath('/draco/gltf/')
+useGLTF.setDecoderPath(`${import.meta.env.BASE_URL}draco/gltf/`)
 
 interface Props {
   mouseNx: number
