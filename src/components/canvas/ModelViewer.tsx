@@ -63,17 +63,15 @@ function GltfModel() {
     return clone
   })()
 
-  const floatTime = useRef(0)
   const baseY = MODEL_CONFIG.position[1]
 
-  useFrame((_, delta) => {
+  useFrame((state) => {
     if (!groupRef.current) return
-    floatTime.current += delta * 0.6
-    groupRef.current.position.y = baseY + Math.sin(floatTime.current) * 0.18
+    groupRef.current.position.y = baseY + Math.sin(state.clock.elapsedTime * 0.6) * 0.12
   })
 
   return (
-    <group ref={groupRef} position={MODEL_CONFIG.position} rotation={MODEL_CONFIG.rotation}>
+    <group ref={groupRef} position={MODEL_CONFIG.position} rotation={MODEL_CONFIG.rotation} scale={MODEL_CONFIG.scale}>
       <primitive object={normalizedScene} />
     </group>
   )

@@ -5,6 +5,8 @@ import * as THREE from 'three'
 import { FLOATING_OBJECTS } from '../../config/floating-objects.config'
 import type { FloatingObjectConfig } from '../../config/floating-objects.config'
 
+FLOATING_OBJECTS.filter(c => c.shape === 'glb' && c.glbPath).forEach(c => useGLTF.preload(c.glbPath!))
+
 function FloatingGlb({ cfg }: { cfg: FloatingObjectConfig }) {
   const { scene } = useGLTF(cfg.glbPath!)
   const groupRef = useRef<THREE.Group>(null)
@@ -118,13 +120,13 @@ export function FloatingObjects() {
       {primitiveItems.map((cfg) => (
         <FloatingItem key={cfg.id} cfg={cfg} />
       ))}
-      <GlbErrorBoundary>
-        <Suspense fallback={null}>
-          {glbItems.map((cfg) => (
-            <FloatingGlb key={cfg.id} cfg={cfg} />
-          ))}
-        </Suspense>
-      </GlbErrorBoundary>
+      {glbItems.map((cfg) => (
+        <GlbErrorBoundary key={cfg.id}>
+          <Suspense fallback={null}>
+            <FloatingGlb cfg={cfg} />
+          </Suspense>
+        </GlbErrorBoundary>
+      ))}
     </>
   )
 }

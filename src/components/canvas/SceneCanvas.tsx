@@ -2,6 +2,7 @@ import { Canvas } from '@react-three/fiber'
 import { Suspense } from 'react'
 import { SceneLighting } from './SceneLighting'
 import { ModelViewer } from './ModelViewer'
+import { IslandModels } from './IslandModels'
 import { CameraRig } from './CameraRig'
 
 interface Props {
@@ -26,6 +27,7 @@ export function SceneCanvas({ mouseNx, mouseNy }: Props) {
       <Suspense fallback={null}>
         <SceneLighting />
         <ModelViewer />
+        <IslandModels />
         <CameraRig mouseNx={mouseNx} mouseNy={mouseNy} />
       </Suspense>
     </Canvas>
